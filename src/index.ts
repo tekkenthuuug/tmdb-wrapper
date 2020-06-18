@@ -1,5 +1,5 @@
 import axios from './axios-config';
-import { DiscoverMovieResponse, PosterSizes, BackdropSizes } from './types';
+import { DiscoverResponse, PosterSizes, BackdropSizes } from './types';
 
 export class TMDB {
   __apiKey: string;
@@ -13,7 +13,7 @@ export class TMDB {
     this.defaultPosterSize = defaultPosterSize;
   }
 
-  _convertImageUrls = (data: DiscoverMovieResponse, posterSize: PosterSizes, backdropSize: BackdropSizes) => {
+  _convertImageUrls = (data: DiscoverResponse, posterSize: PosterSizes, backdropSize: BackdropSizes) => {
     return data.results.map(result => {
       return {
         ...result,
@@ -23,12 +23,13 @@ export class TMDB {
     });
   };
 
-  async discoverMovie(
+  async discover(
+    type: 'movie' | 'tv',
     posterSize = this.defaultPosterSize,
     backdropSize = this.defaultBackdropSize,
     additionalParams: any = {}
   ) {
-    const res = await axios.get<DiscoverMovieResponse>('/discover/movie', {
+    const res = await axios.get<DiscoverResponse>(`/discover/${type}`, {
       params: {
         api_key: this.__apiKey,
         sort_by: 'popularity.desc',

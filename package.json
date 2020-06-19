@@ -1,6 +1,6 @@
 {
   "name": "themoviedb-wrapper",
-  "version": "0.3.6",
+  "version": "0.3.8",
   "license": "MIT",
   "main": "./ts-built/index.js",
   "dependencies": {

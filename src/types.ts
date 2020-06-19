@@ -1,13 +1,17 @@
-export interface Movie {
+export interface Config {
+  apiKey: string;
+  defaultPosterSize?: PosterSizes;
+  defaultBackdropSize?: BackdropSizes;
+}
+
+export interface BaseItem {
   poster_path?: string | null;
   adult?: boolean;
   overview?: string;
   release_date?: string;
   genre_ids?: number[];
   id?: number;
-  original_title?: string;
   original_language?: string;
-  title?: string;
   backdrop_path?: string | null;
   popularity?: number;
   vote_count?: number;
@@ -15,7 +19,17 @@ export interface Movie {
   vote_average?: number;
 }
 
-export interface TVSeries extends Movie {}
+export interface Movie extends BaseItem {
+  original_title?: string;
+  title?: string;
+}
+
+export interface NormalizedMovie extends BaseItem {
+  original_name?: string;
+  name?: string;
+}
+
+export interface TVSeries extends NormalizedMovie {}
 
 export type BackdropSizes = 'w300' | 'w780' | 'w1280' | 'original';
 export type LogoSizes = 'w45' | 'w92' | 'w154' | 'w185' | 'w300' | 'w500' | 'original';

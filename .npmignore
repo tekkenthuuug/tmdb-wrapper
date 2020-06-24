@@ -3,3 +3,5 @@ src
 package-lock.json
 tsconfig.json
 .gitignore
+test.ts
+test.js

@@ -8,6 +8,8 @@ import {
   NormalizedMovie,
   BaseItem,
   Config,
+  SearchParams,
+  MovieDetails,
 } from './types';
 
 export class TMDB {
@@ -22,7 +24,7 @@ export class TMDB {
     this.defaultPosterSize = config.defaultPosterSize || 'w342';
   }
 
-  _convertImageUrls = (data: BaseItem[], posterSize: PosterSizes, backdropSize: BackdropSizes) => {
+  _convertImageUrls = (data: any[], posterSize: PosterSizes, backdropSize: BackdropSizes) => {
     return data.map(result => {
       return {
         ...result,
@@ -32,7 +34,7 @@ export class TMDB {
     });
   };
 
-  normalizeMovies = (movies: Movie[]): NormalizedMovie[] => {
+  normalizeMovies = (movies: any[]): NormalizedMovie[] => {
     return movies.map(movie => {
       const { original_title, title, ...otherMovieProperties } = movie;
       return {
@@ -63,5 +65,35 @@ export class TMDB {
     const results = type === 'movie' ? this.normalizeMovies(res.data.results) : res.data.results;
 
     return this._convertImageUrls(results, posterSize, backdropSize);
+  }
+
+  async search(
+    type: 'movie' | 'tv',
+    searchParams: SearchParams,
+    posterSize = this.defaultPosterSize,
+    backdropSize = this.defaultBackdropSize
+  ) {
+    const res = await axios.get<DiscoverResponse>(`/search/${type}`, {
+      params: {
+        api_key: this.__apiKey,
+        ...searchParams,
+      },
+    });
+
+    const results = type === 'movie' ? this.normalizeMovies(res.data.results) : res.data.results;
+
+    return this._convertImageUrls(results, posterSize, backdropSize);
+  }
+
+  async getMovieDetailsById(id: number, posterSize = this.defaultPosterSize, backdropSize = this.defaultBackdropSize) {
+    const res = await axios.get<MovieDetails>(`/movie/${id}`, {
+      params: {
+        api_key: this.__apiKey,
+      },
+    });
+
+    const result = this.normalizeMovies([res.data]);
+
+    return this._convertImageUrls(result, posterSize, backdropSize);
   }
 }

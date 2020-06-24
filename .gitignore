@@ -27,3 +27,10 @@ benchmarks/graphs
 
 # Build
 ts-built
+
+# Env
+.env
+
+# Test
+test.js
+test.ts

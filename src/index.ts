@@ -10,6 +10,7 @@ import {
   Config,
   SearchParams,
   MovieDetails,
+  TVSeriesDetails,
 } from './types';
 
 export class TMDB {
@@ -85,15 +86,37 @@ export class TMDB {
     return this._convertImageUrls(results, posterSize, backdropSize);
   }
 
-  async getMovieDetailsById(id: number, posterSize = this.defaultPosterSize, backdropSize = this.defaultBackdropSize) {
+  async getMovieDetailsById(
+    id: number,
+    appendToResponse?: string,
+    posterSize = this.defaultPosterSize,
+    backdropSize = this.defaultBackdropSize
+  ) {
     const res = await axios.get<MovieDetails>(`/movie/${id}`, {
       params: {
         api_key: this.__apiKey,
+        append_to_response: appendToResponse,
       },
     });
 
     const result = this.normalizeMovies([res.data]);
 
-    return this._convertImageUrls(result, posterSize, backdropSize);
+    return this._convertImageUrls(result, posterSize, backdropSize)[0];
+  }
+
+  async getTVSeriesDetailsById(
+    id: number,
+    appendToResponse?: string,
+    posterSize = this.defaultPosterSize,
+    backdropSize = this.defaultBackdropSize
+  ) {
+    const res = await axios.get<TVSeriesDetails>(`/tv/${id}`, {
+      params: {
+        api_key: this.__apiKey,
+        append_to_response: appendToResponse,
+      },
+    });
+
+    return this._convertImageUrls([res.data], posterSize, backdropSize)[0];
   }
 }

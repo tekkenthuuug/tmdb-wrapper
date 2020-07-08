@@ -74,9 +74,25 @@ export interface BaseDetails extends BaseItem {
   tagline?: string | null;
 }
 
+export interface CastMember {
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  gender: number;
+  id: number;
+  name: string;
+  order: number;
+  profile_path: string;
+}
+
+export interface Credits {
+  cast: CastMember[];
+}
+
 export interface MovieDetails extends BaseDetails {
   original_title?: string;
   title?: string;
+  credits?: Credits;
 }
 
 export interface NormalizedMovieDetails extends BaseDetails {
@@ -90,6 +106,43 @@ export interface NormalizedMovie extends BaseItem {
 }
 
 export interface TVSeries extends NormalizedMovie {}
+
+export interface TVEpisode {
+  air_date: string;
+  episode_number: number;
+  id: number;
+  name: string;
+  overview: string;
+  production_code: string;
+  season_number: number;
+  show_id: number;
+  still_path: string;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface TVSeason {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  season_number: number;
+}
+export interface TVSeriesDetails extends BaseDetails {
+  episode_run_time: number[];
+  first_air_date: string;
+  in_production: boolean;
+  last_air_date: string;
+  last_episode_air: TVEpisode;
+  number_of_episodes: number;
+  number_of_seasons: number;
+  seasons: TVSeason;
+  type: string;
+  original_name?: string;
+  name?: string;
+}
 
 export type BackdropSizes = 'w300' | 'w780' | 'w1280' | 'original';
 export type LogoSizes = 'w45' | 'w92' | 'w154' | 'w185' | 'w300' | 'w500' | 'original';

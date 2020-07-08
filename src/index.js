@@ -115,7 +115,7 @@ var TMDB = /** @class */ (function () {
             });
         });
     };
-    TMDB.prototype.getMovieDetailsById = function (id, posterSize, backdropSize) {
+    TMDB.prototype.getMovieDetailsById = function (id, appendToResponse, posterSize, backdropSize) {
         if (posterSize === void 0) { posterSize = this.defaultPosterSize; }
         if (backdropSize === void 0) { backdropSize = this.defaultBackdropSize; }
         return __awaiter(this, void 0, void 0, function () {
@@ -124,13 +124,34 @@ var TMDB = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, axios_config_1["default"].get("/movie/" + id, {
                             params: {
-                                api_key: this.__apiKey
+                                api_key: this.__apiKey,
+                                append_to_response: appendToResponse
                             }
                         })];
                     case 1:
                         res = _a.sent();
                         result = this.normalizeMovies([res.data]);
-                        return [2 /*return*/, this._convertImageUrls(result, posterSize, backdropSize)];
+                        return [2 /*return*/, this._convertImageUrls(result, posterSize, backdropSize)[0]];
+                }
+            });
+        });
+    };
+    TMDB.prototype.getTVSeriesDetailsById = function (id, appendToResponse, posterSize, backdropSize) {
+        if (posterSize === void 0) { posterSize = this.defaultPosterSize; }
+        if (backdropSize === void 0) { backdropSize = this.defaultBackdropSize; }
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, axios_config_1["default"].get("/tv/" + id, {
+                            params: {
+                                api_key: this.__apiKey,
+                                append_to_response: appendToResponse
+                            }
+                        })];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, this._convertImageUrls([res.data], posterSize, backdropSize)[0]];
                 }
             });
         });
